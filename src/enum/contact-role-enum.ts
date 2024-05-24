@@ -1,0 +1,5 @@
+export enum ContactRole {
+    CLIENT = 'CLIENT',
+    SERVICE_PROVIDER = 'SERVICE_PROVIDER',
+    END_CLIENT = 'END_CLIENT'
+}

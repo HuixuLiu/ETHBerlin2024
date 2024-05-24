@@ -1,0 +1,6 @@
+export enum OfferStatus {
+    WAITING_FOR_RESPONSE = 'WAITING_FOR_RESPONSE',
+    CONFIRMED = 'CONFIRMED',
+    REJECTED = 'REJECTED',
+    EXPIRED = 'EXPIRED'
+}
