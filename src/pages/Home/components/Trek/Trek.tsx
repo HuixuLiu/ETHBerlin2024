@@ -30,7 +30,7 @@ const Trek = (): JSX.Element => {
           color: theme.palette.common.white,
         }}
       >
-        @secureID.com
+        @uPass.com
       </Typography>
     </Box>
   );

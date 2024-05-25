@@ -110,7 +110,7 @@ const Footer = (): JSX.Element => {
           color="text.secondary"
           gutterBottom
         >
-          &copy; SecureID 2024, ETHBerlin04. All rights reserved
+          &copy; uPass.com 2024, ETHBerlin04. All rights reserved
         </Typography>
         <Typography
           align={'center'}

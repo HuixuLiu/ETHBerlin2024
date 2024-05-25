@@ -27,7 +27,7 @@ const Topbar = ({ onSidebarOpen }: Props): JSX.Element => {
         display={'flex'}
         component={'a'}
         href="/"
-        title="SecureID"
+        title="uPass"
         width={{ xs: 100, md: 120 }}
       >
         <Box
