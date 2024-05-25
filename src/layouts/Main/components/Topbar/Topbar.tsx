@@ -41,53 +41,11 @@ const Topbar = ({
 }: Props): JSX.Element => {
   const theme = useTheme();
   const { mode } = theme.palette;
-
-  // const { publicKey, sendTransaction } = useWallet();
-  // const publickKey = 'Cbs6hxFaAfBzNTxobZuqYQ5vWKGTEEUbbxbREtqMnxUX';
-  const programId = new PublicKey('Cbs6hxFaAfBzNTxobZuqYQ5vWKGTEEUbbxbREtqMnxUX');
-  const tokenMintPublicKey = new PublicKey('Cbs6hxFaAfBzNTxobZuqYQ5vWKGTEEUbbxbREtqMnxUX');
-
-  const wallet = useWallet();
+  // const wallet = useWallet();
   const [walletAddress, setWalletAddress] = useState(null);
-  const [connection] = useState(new Connection('https://api.devnet.solana.com'));
-  const [initializerAmount, setInitializerAmount] = useState('');
-  const [takerAmount, setTakerAmount] = useState('');
-
-  async function initializeEscrow() {
-    const transaction = new Transaction();
-
-    const instruction = new TransactionInstruction({
-      keys: [
-        { pubkey: tokenMintPublicKey, isSigner: true, isWritable: true },
-        // { pubkey: escrowAccount, isSigner: false, isWritable: true },
-        // { pubkey: depositTokenAccountPubkey, isSigner: false, isWritable: true },
-        // { pubkey: receiveTokenAccountPubkey, isSigner: false, isWritable: true },
-        { pubkey: tokenMintPublicKey, isSigner: false, isWritable: false },
-        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-      ],
-      programId: programId,
-      data: Buffer.from([/* serialized data based on your contract's API */]),
-    });
-
-    transaction.add(instruction);
-
-    try {
-      const { blockhash } = await connection.getRecentBlockhash();
-      transaction.recentBlockhash = blockhash;
-      transaction.feePayer = wallet.publicKey;
-
-      const signedTransaction = await wallet.signTransaction(transaction);
-      const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-      await connection.confirmTransaction(signature);
-
-      // setIsTransactionSent(true);
-      // setTransactionSignature(signature);
-      alert('Escrow initialized successfully!');
-    } catch (error) {
-      console.error('Error initializing escrow:', error);
-      alert('Failed to initialize escrow');
-    }
-  }
+  // const [connection] = useState(new Connection('https://api.devnet.solana.com'));
+  // const [initializerAmount, setInitializerAmount] = useState('');
+  // const [takerAmount, setTakerAmount] = useState('');
 
   // Function to connect to the wallet
   async function connectWallet() {
@@ -130,19 +88,6 @@ const Topbar = ({
     }
   });
   // Function to handle wallet connection
-  const handleConnectWallet = async () => {
-    try {
-      const solana = (window as any).solana;
-      if (solana && solana.isPhantom) {
-        const response = await solana.connect();
-        setWalletAddress(response.publicKey.toString());
-      } else {
-        NotificationService('Error!', NotificationType.DANGER, 'Solana wallet not found. Please install Phantom Wallet.');     
-      }
-    } catch (err) {
-      NotificationService('Error!', NotificationType.DANGER, 'Failed to connect wallet.');
-    }
-  };
 
   const dispatch = useDispatch<AppDispatch>();
   const address = useSelector(selectWalletAddress);

@@ -26,7 +26,8 @@ const Footer = (): JSX.Element => {
       const contract = await ContractService.initializeEthers();
       const response = await ContractService.checkIsValid(contract.contract, address);
       if (!response) {
-        NotificationService('Something wrong with Smart Contract!', NotificationType.DANGER, address);
+        alert('This wallet is not qualified!');
+        NotificationService('Address Not eligible!', NotificationType.DANGER, address);
       } else {
         if(response === true){
           alert('Wallet is qualified!');
