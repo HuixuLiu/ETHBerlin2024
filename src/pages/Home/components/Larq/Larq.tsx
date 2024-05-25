@@ -19,7 +19,7 @@ const Larq = (): JSX.Element => {
           // textTransform: 'uppercase',
         }}
       >
-        The new way to earn on your cryptos
+        KYC Service but on Decentralized Wallets
       </Typography>
       <Typography
         variant="h6"
@@ -30,7 +30,7 @@ const Larq = (): JSX.Element => {
           color: theme.palette.common.white,
         }}
       >
-        Tokenized Investment Service
+        We provide a secure and decentralized way to prove your eligibility.
       </Typography>
     </Box>
   );

@@ -72,15 +72,24 @@ const Form = (): JSX.Element => {
   const onSubmit = async (values: any, {setErrors, setStatus, setSubmitting}: any) => {
     try {
       handleGetWalletAddress();
-      //const response = await EthereumService.uploadData(address, values.publicKey, values.signature, age, isDoctor, isDriver);
       //Should to ZK Proof here
-      const contract = await ContractService.initializeEthers();
-      const response = await ContractService.addAddress(contract.contract, address);
-      if (!response) {
-        //
+      const zkproof = await EthereumService.uploadData(address, values.publicKey, values.signature, age, isDoctor, isDriver);
+
+      if(zkproof){
+        NotificationService('Congrats! Upload Successfully', NotificationType.SUCCESS, 'ZK Proved Valid!');
+
+        const contract = await ContractService.initializeEthers();
+        const response = await ContractService.addAddress(contract.contract, address);
+        if (!response) {
+          NotificationService('Failed to add address to valid list', NotificationType.DANGER, 'The address is not valid');
+        } else {
+          navigate('/home', 
+            {state:{zkproof : zkproof, age: age, isDoctor: isDoctor, isDriver: isDriver, address: address}}
+          );
+          NotificationService('We labeled your address!', NotificationType.SUCCESS, 'You can now check your proof');
+        }
       } else {
-        navigate('/home');
-        NotificationService('Upload Successfully!', NotificationType.SUCCESS, values.username);
+        NotificationService('ZK Proof Failed!', NotificationType.DANGER, 'The signature is not valid');
       }
     } catch (error: any) {
       const message = error.message || 'Something went wrong';

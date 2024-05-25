@@ -3,10 +3,14 @@ import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import {useLocation} from 'react-router-dom';
 
 const Goby = (): JSX.Element => {
   const theme = useTheme();
-  const Proof: string = 'ZK12edfvsrtfebfgdvsdfdf';
+  const location = useLocation();
+  const Proof: string = 'ZK1rew543qwdear34rqdewds';
+
+  // const Proof: string = location.state.zkproof;
 
   return (
     <Box>

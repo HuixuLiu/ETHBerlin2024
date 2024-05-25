@@ -21,7 +21,7 @@ const EthereumService = {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        NotificationService('Failed to Upload Data on chain', NotificationType.DANGER, error.response?.data.message);
+        NotificationService('Failed to Upload Data to server', NotificationType.DANGER, error.response?.data.message);
       }
     }
     return null;

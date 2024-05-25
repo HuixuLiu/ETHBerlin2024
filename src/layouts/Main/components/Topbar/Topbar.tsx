@@ -3,10 +3,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { alpha, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction } from '@solana/web3.js';
-import { FC, useCallback } from 'react';
 import { NotificationType } from '../../../../enum/notifcation-type-enum';
 import { NotificationService } from '../../../../services/notification-service';
 

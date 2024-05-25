@@ -18,7 +18,7 @@ const Nike = (): JSX.Element => {
           // textTransform: 'uppercase',
         }}
       >
-        We invest in the selected strategies and hands over the tokens to you
+        We prove the eligibility of your wallet for you.
       </Typography>
       <Typography
         variant="h6"

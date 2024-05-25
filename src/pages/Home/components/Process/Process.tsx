@@ -14,13 +14,13 @@ const mock = [
   {
     title: 300,
     subtitle:
-      '300 + Web3 tokens options, which distributes the risk and stabalize your returns.',
+      '300+ Web3 wallets supported, which makes us the most versatile service provider in the market.',
     suffix: '+',
   },
   {
     title: 45,
     subtitle:
-      '45 + portfolio options to help you to get rich easily.',
+      '45 + Web3 wallets supported, which makes us the most versatile service provider in the market.',
     suffix: '+',
   },
   {
@@ -51,10 +51,10 @@ const Process = (): JSX.Element => {
         <Grid item xs={12} md={6} data-aos={isMd ? 'fade-right' : 'fade-up'}>
           <Box marginBottom={2}>
             <Typography variant={'h4'} sx={{ fontWeight: 700 }} gutterBottom>
-              We are a group of talented Traders & Web3 Lovers.
+              We are a group of talented Web3 Lovers who care about your identity proof.
             </Typography>
             <Typography color="text.secondary">
-              Unlike teams from big agencies, we will treat your portfolios as
+              Unlike teams from big agencies, we will treat your privacy as
               ours. We will walk you through our smooth and transparent process.
             </Typography>
           </Box>
