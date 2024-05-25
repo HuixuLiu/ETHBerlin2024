@@ -35,7 +35,7 @@ const Welcome = (): JSX.Element => {
           fontWeight: 900,
         }}
       >
-        GM !
+        Congrats!
       </Typography>
       <Typography
         variant="h3"
@@ -45,7 +45,17 @@ const Welcome = (): JSX.Element => {
           fontWeight: 900,
         }}
       >
-        Wanna get rich fast?
+        We proved your idendity validity! 
+      </Typography>
+      <Typography
+        variant="h3"
+        align={'center'}
+        gutterBottom
+        sx={{
+          fontWeight: 900,
+        }}
+      >
+        Here's your ZK proof...
       </Typography>
       <Typography
         variant="h6"
@@ -56,26 +66,23 @@ const Welcome = (): JSX.Element => {
           fontWeight: 400,
         }}
       >
-        Welcome to getRichFast.com
-        <br /> Let's Ducking Goooooooo! - Your most reliable Tokenized Investment Service
+        Welcome to SecureID.com
+        <br /> Let's Ducking Goooooooo! - Your most reliable Decentralized Identity Service
       </Typography>
     </Box>
   );
 
   const GridItemPartnersBlock = () => (
     <Box display="flex" flexWrap="wrap" justifyContent={'center'} width={1}>
-      <Box maxWidth={80} width={1} marginTop={2} marginRight={4}>
+      <Box maxWidth={200}  marginTop={2} marginRight={4}>
         <Box
           component="img"
           height={1}
           width={1}
-          src={'./solana.png'}
+          src={'./ethereum.png'}
           alt="..."
           sx={{
-            // filter:
-            //     theme.palette.mode === 'dark'
-            //       ? 'brightness(0) invert(0.7)'
-            //       : 'contrast(0) brightness(0)',
+            
           }}
         /> 
        

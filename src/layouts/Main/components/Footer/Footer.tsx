@@ -2,13 +2,49 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import { Form } from 'react-router-dom';
+import { TextField } from '@mui/material';
+import { on } from 'events';
+import { useFormik } from 'formik';
+import { NotificationType } from 'enum/notifcation-type-enum';
+import address from 'redux/slices/address';
+import ContractService from 'services/contract-service';
+import { NotificationService } from 'services/notification-service';
 
 const Footer = (): JSX.Element => {
   const theme = useTheme();
   const { mode } = theme.palette;
+
+  const [address, setAddress] = React.useState('');
+
+  const onSubmit = async (address: string) => {
+    try {
+      //const response = await EthereumService.uploadData(address, values.publicKey, values.signature, age, isDoctor, isDriver);
+      //Should to ZK Proof here
+      const contract = await ContractService.initializeEthers();
+      const response = await ContractService.checkIsValid(contract.contract, address);
+      if (!response) {
+        NotificationService('Something wrong with Smart Contract!', NotificationType.DANGER, address);
+      } else {
+        if(response === true){
+          alert('Wallet is qualified!');
+        } else {
+          alert('Wallet is not qualified!');
+        }
+      }
+    } catch (error: any) {
+      const message = error.message || 'Something went wrong';
+      NotificationService('Error!', NotificationType.DANGER, message);
+    }
+  };
+
+  // const formik = useFormik({
+  //   initialValues,
+  //   // validationSchema: validationSchema,
+  //   onSubmit,
+  // });
 
   return (
     <Grid container spacing={2}>
@@ -24,43 +60,43 @@ const Footer = (): JSX.Element => {
             display={'flex'}
             component="a"
             href="/"
-            title="theFront"
+            title="EthBerlin04"
             width={80}
           >
             <Box
               component={'img'}
               src={
-                mode === 'light'
-                  ? 'https://assets.maccarianagency.com/the-front/logos/logo.svg'
-                  : 'https://assets.maccarianagency.com/the-front/logos/logo-negative.svg'
+                'Ethereum.png'
               }
               height={1}
               width={1}
             />
           </Box>
           <Box display="flex" flexWrap={'wrap'} alignItems={'center'}>
-            <Box marginTop={1} marginRight={2}>
-              <Link
-                underline="none"
-                component="a"
-                // href="/home"
-                color="text.primary"
-                variant={'subtitle2'}
-              >
-                getRichFast.com, Your best crypto investment advisor
-              </Link>
-            </Box>
-            
+          {/* <Form onSubmit={formik.handleSubmit}> */}
+          <Grid item xs={12}>
+          <Typography variant={'subtitle2'} sx={{ marginBottom: 2 }}>
+              Check if the wallet is qualified:
+            </Typography>
+            <TextField
+                label="Address"
+                variant="outlined"
+                name={'address'}
+                fullWidth
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}     
+              />
+          </Grid>
             <Box marginTop={1}>
               <Button
                 variant="outlined"
                 color="primary"
                 component="a"
                 target="blank"
-                href="https://mui.com/store/items/the-front-landing-page/"
+                onClick={() => onSubmit(address)}
                 size="small"
               >
-                Connect Wallet
+                Check Wallet
               </Button>
             </Box>
           </Box>
@@ -73,7 +109,7 @@ const Footer = (): JSX.Element => {
           color="text.secondary"
           gutterBottom
         >
-          &copy; theFront. 2023, Municn. All rights reserved
+          &copy; SecureID 2024, ETHBerlin04. All rights reserved
         </Typography>
         <Typography
           align={'center'}
@@ -81,10 +117,7 @@ const Footer = (): JSX.Element => {
           color="text.secondary"
           component={'p'}
         >
-          When you visit or interact with our sites, services or tools, we or
-          our authorised service providers may use cookies for storing
-          information to help provide you with a better, faster and safer
-          experience and for marketing purposes.
+          
         </Typography>
       </Grid>
     </Grid>
@@ -92,3 +125,5 @@ const Footer = (): JSX.Element => {
 };
 
 export default Footer;
+
+

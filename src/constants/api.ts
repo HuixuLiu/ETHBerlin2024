@@ -7,6 +7,7 @@ export const HTTP_METHOD = {
 };
 
 export const XSRF_TOKEN: any = {
+  ETH: 'X-XSRF-TOKEN',
   AUTH: 'X-XSRF-TOKEN',
   COMP: 'X-XSRF-TOKEN',
   CONTACT: 'X-XSRF-TOKEN',
@@ -21,6 +22,7 @@ export const XSRF_TOKEN: any = {
 };
 
 export const XSRF_COOKIE: any = {
+  ETH: 'XSRF-TOKEN',
   AUTH: 'XSRF-TOKEN',
   COMP: 'XSRF-TOKEN',
   CONTACT: 'XSRF-TOKEN',
@@ -35,6 +37,9 @@ export const XSRF_COOKIE: any = {
 };
 
 export const ENDPOINT: any = {
+  ETH: {
+    UPLOAD: '/eth/upload',
+  },
   AUTH: {
     VALIDATE: '/auth/validate-jwt',
     CLEAN: '/auth/clean',

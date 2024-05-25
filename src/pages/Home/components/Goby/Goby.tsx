@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 
 const Goby = (): JSX.Element => {
   const theme = useTheme();
+  const Proof: string = 'ZK12edfvsrtfebfgdvsdfdf';
 
   return (
     <Box>
@@ -18,10 +19,10 @@ const Goby = (): JSX.Element => {
           color: theme.palette.common.white,
         }}
       >
-        getRichFast.com
+        {Proof}
       </Typography>
       <Typography
-        variant="h6"
+        variant="h4"
         component="p"
         color="text.primary"
         align={'center'}
@@ -29,7 +30,7 @@ const Goby = (): JSX.Element => {
           color: theme.palette.common.white,
         }}
       >
-        Your most reliable Tokenized Investment Service
+        Feel free to check out the proof above!
       </Typography>
     </Box>
   );

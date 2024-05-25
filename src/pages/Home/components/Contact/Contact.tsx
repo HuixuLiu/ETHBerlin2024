@@ -26,7 +26,7 @@ const Contact = (): JSX.Element => {
         color={'text.secondary'}
         align={'center'}
       >
-        @getRichFast.com
+        @secureID.com
       </Typography>
       <Box marginTop={3} display={'flex'} justifyContent={'center'}>
         <Button
@@ -57,6 +57,8 @@ const Contact = (): JSX.Element => {
           Connect Wallet
         </Button>
       </Box>
+      
+      
     </Box>
   );
 };

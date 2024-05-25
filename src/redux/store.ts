@@ -1,6 +1,7 @@
 import {configureStore, ThunkAction, Action} from '@reduxjs/toolkit';
 import counterReducer from './slices/counter';
 import authReducer from './slices/auth';
+import addressReducer from './slices/address';
 import showQRCodeReducer from './slices/show-qr-code';
 import storage from 'redux-persist/lib/storage';
 import {
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   counter: counterReducer,
   auth: authReducer,
   showQRCode: showQRCodeReducer,
+  wallet: addressReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

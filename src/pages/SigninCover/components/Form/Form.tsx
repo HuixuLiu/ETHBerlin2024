@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Box from '@mui/material/Box';
@@ -12,6 +12,12 @@ import {useNavigate} from 'react-router-dom';
 import useAuth from '../../../../hooks/useAuth';
 import {NotificationService} from '../../../../services/notification-service';
 import {NotificationType} from '../../../../enum/notifcation-type-enum';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import  EthereumService  from '../../../../services/ethereum';
+import ContractService from 'services/contract-service';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectWalletAddress, selectWalletStatus, getWalletAddress } from 'redux/slices/address';
+import { AppDispatch } from 'redux/store';
 
 const validationSchema = yup.object({
   username: yup
@@ -29,33 +35,52 @@ const Form = (): JSX.Element => {
   const {signIn} = useAuth();
   const navigate = useNavigate();
 
+  const [age, setAge] = React.useState(18);
+  const [isDoctor, setIsDoctor] = React.useState('');
+  const [isDriver, setIsDriver] = React.useState('');
+
+  const [walletAddress, setWalletAddress] = useState(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const address = useSelector(selectWalletAddress);
+  const status = useSelector(selectWalletStatus);
+
+  const handleGetWalletAddress = () => {
+    console.log('Connected address:', address);
+
+    setWalletAddress(address);
+    dispatch(getWalletAddress());
+
+  };
+
+  const handleAgeChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as unknown as number);
+  };
+
+  const handleDoctorChange = (event: SelectChangeEvent) => {
+    setIsDoctor(event.target.value as string);
+  };
+
+  const handleDriverChange = (event: SelectChangeEvent) => {
+    setIsDriver(event.target.value as string);
+  };
+
   const initialValues = {
-    username: '',
-    password: '',
+    signature: '',
+    publicKey: '',
   };
 
   const onSubmit = async (values: any, {setErrors, setStatus, setSubmitting}: any) => {
     try {
-      const state = await signIn(values.username, values.password);
-      if (!state) {
+      handleGetWalletAddress();
+      //const response = await EthereumService.uploadData(address, values.publicKey, values.signature, age, isDoctor, isDriver);
+      //Should to ZK Proof here
+      const contract = await ContractService.initializeEthers();
+      const response = await ContractService.addAddress(contract.contract, address);
+      if (!response) {
         //
       } else {
         navigate('/home');
-        NotificationService('Welcome!', NotificationType.SUCCESS, values.username);
-        // Store.addNotification({
-        //     title: 'Fail to login',
-        //     message: 'Please check your password or username',
-        //     // type: "success", warning, info, default
-        //     type: 'danger',
-        //     insert: 'top',
-        //     container: 'top-right',
-        //     animationIn: ['animate__animated', 'animate__fadeIn'],
-        //     animationOut: ['animate__animated', 'animate__fadeOut'],
-        //     dismiss: {
-        //         duration: 5000,
-        //         // onScreen: true
-        //     }
-        // });
+        NotificationService('Upload Successfully!', NotificationType.SUCCESS, values.username);
       }
     } catch (error: any) {
       const message = error.message || 'Something went wrong';
@@ -72,7 +97,7 @@ const Form = (): JSX.Element => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit,
   });
 
@@ -87,7 +112,7 @@ const Form = (): JSX.Element => {
           gutterBottom
           color={'text.secondary'}
         >
-          Login
+          Select your identity
         </Typography>
         <Typography
           variant="h4"
@@ -95,28 +120,28 @@ const Form = (): JSX.Element => {
             fontWeight: 700,
           }}
         >
-          Welcome Back
+          Good Morning!
         </Typography>
         <Typography color="text.secondary">
-          Login to manage the website.
+          Upload to gain your digital identity proof.
         </Typography>
       </Box>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Typography variant={'subtitle2'} sx={{ marginBottom: 2 }}>
-              请输入您的用户名：
+              Please enter your identity signature:
             </Typography>
             <TextField
-              label="Username *"
+              label="Signature *"
               variant="outlined"
-              name={'username'}
+              name={'signature'}
               fullWidth
-              value={formik.values.username}
+              value={formik.values.signature}
               onChange={formik.handleChange}
-              error={formik.touched.username && Boolean(formik.errors.username)}
+              error={formik.touched.signature && Boolean(formik.errors.signature)}
               // @ts-ignore
-              helperText={formik.touched.username && formik.errors.username}
+              helperText={formik.touched.signature && formik.errors.signature}
             />
           </Grid>
           <Grid item xs={12}>
@@ -130,7 +155,7 @@ const Form = (): JSX.Element => {
             >
               <Box marginBottom={{ xs: 1, sm: 0 }}>
                 <Typography variant={'subtitle2'}>
-                  请输入您的密码：
+                  Please enter your public key:
                 </Typography>
               </Box>
               <Typography variant={'subtitle2'}>
@@ -140,24 +165,31 @@ const Form = (): JSX.Element => {
                   href={'/password-reset-cover'}
                   underline={'none'}
                 >
-                  Forgot your password?
+                  Don't have a public key?
                 </Link>
               </Typography>
             </Box>
             <TextField
-              label="Password *"
+              label="Public Key *"
               variant="outlined"
-              name={'password'}
+              name={'publicKey'}
               type={'password'}
               fullWidth
-              value={formik.values.password}
+              value={formik.values.publicKey}
               onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
+              error={formik.touched.publicKey && Boolean(formik.errors.publicKey)}
               // @ts-ignore
-              helperText={formik.touched.password && formik.errors.password}
+              helperText={formik.touched.publicKey && formik.errors.publicKey}
             />
           </Grid>
-          <Grid item container xs={12}>
+          </Grid>
+          <Grid container spacing={4}>
+          <Grid item  xs={12}>
+            <Box marginBottom={{ xs: 1, sm: 0 }}>
+              <Typography variant={'subtitle2'} sx={{ marginBottom: 4, marginTop : 4 }}>
+                Please select your age, title and driver's liscence status:
+              </Typography>
+            </Box>
             <Box
               display="flex"
               flexDirection={{ xs: 'column', sm: 'row' }}
@@ -167,23 +199,70 @@ const Form = (): JSX.Element => {
               maxWidth={600}
               margin={'0 auto'}
             >
-              <Box marginBottom={{ xs: 1, sm: 0 }}>
-                <Typography variant={'subtitle2'}>
-                  Don't have an account yet?{' '}
-                  <Link
-                    component={'a'}
-                    color={'primary'}
-                    href={'/signup-cover'}
-                    underline={'none'}
-                  >
-                    Sign up here.
-                  </Link>
-                </Typography>
-              </Box>
-              <Button size={'large'} variant={'contained'} type={'submit'}>
-                Login
-              </Button>
+              
+              <Grid item container xs={12}>
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={age.toString()}
+                      label="Age"
+                      onChange={handleAgeChange}
+                    >
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+              <Grid item container xs={12}>
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Title</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={isDoctor}
+                      label="Title"
+                      onChange={handleDoctorChange}
+                    >
+                      <MenuItem value={10}>Doctor</MenuItem>
+                      <MenuItem value={20}>None</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+              <Grid item container xs={12}>
+                <Box sx={{ minWidth: 150 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">License</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={isDriver}
+                      label="License"
+                      onChange={handleDriverChange}
+                    >
+                      <MenuItem value={10}>have driver's license</MenuItem>
+                      <MenuItem value={20}>None</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
             </Box>
+            
+            <Grid item container xs={12} justifyContent={'center'}>
+              <Box marginBottom={{ xs: 4, sm: 0 }} marginTop={4} width="100%">
+                <Button size={'large'} variant={'contained'} type={'submit'} fullWidth>
+                  Upload
+                </Button>
+              </Box>
+            </Grid>
+           
+            
           </Grid>
         </Grid>
       </form>

@@ -27,15 +27,15 @@ const Topbar = ({ onSidebarOpen }: Props): JSX.Element => {
         display={'flex'}
         component={'a'}
         href="/"
-        title="theFront"
+        title="SecureID"
         width={{ xs: 100, md: 120 }}
       >
         <Box
           component={'img'}
           src={
             mode === 'light'
-              ? 'https://assets.maccarianagency.com/the-front/logos/logo.svg'
-              : 'https://assets.maccarianagency.com/the-front/logos/logo-negative.svg'
+              ? 'Ethereum.png'
+              : 'Ethereaum.png'
           }
           height={1}
           width={1}

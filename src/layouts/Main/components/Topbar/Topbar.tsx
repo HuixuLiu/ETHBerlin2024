@@ -11,6 +11,22 @@ import { NotificationType } from '../../../../enum/notifcation-type-enum';
 import { NotificationService } from '../../../../services/notification-service';
 
 import { NavItem } from './components';
+import { Typography } from '@mui/material';
+import { color } from '@mui/system';
+
+// Import Ethers.js
+import { Eip1193Provider, ethers } from 'ethers';
+import { ExternalProvider } from '@ethersproject/providers';
+import { useDispatch, useSelector } from 'react-redux';
+import { getWalletAddress, updateWalletAddress, selectWalletAddress, selectWalletStatus } from './../../../../redux/slices/address';
+import { AppDispatch } from 'redux/store';
+
+declare global {
+  interface Window {
+    ethereum: Eip1193Provider;
+  }
+}
+
 
 interface Props {
   onSidebarOpen: () => void;
@@ -73,7 +89,46 @@ const Topbar = ({
     }
   }
 
-  // Function to handle wallet connection
+  // Function to connect to the wallet
+  async function connectWallet() {
+    // Check if the browser has an Ethereum provider (e.g., MetaMask)
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        // Request account access
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        // Create a provider
+        const provider = new ethers.BrowserProvider(window.ethereum);
+
+        // Get the signer
+        const signer = provider.getSigner();
+
+        // Get the user's address
+        const address = await (await signer).getAddress();
+
+        console.log('Connected address:', address);
+
+        setWalletAddress(address);
+
+        // You can now use the provider and signer to interact with the blockchain
+        return { provider, signer };
+      } catch (error) {
+        console.error('Error connecting to the wallet:', error);
+        NotificationService('Error!', NotificationType.DANGER, 'Ethereum wallet not found. Please install Phantom Wallet.');     
+      }
+    } else {
+      console.error('No Ethereum provider found. Install MetaMask.');
+      NotificationService('Error!', NotificationType.DANGER, 'No Ethereum provider found. Install MetaMask.');
+    }
+  }
+
+  // Call the function to connect to the wallet
+  connectWallet().then(({ provider, signer }) => {
+    if (provider && signer) {
+      console.log('Wallet connected successfully!');
+      // Add your logic here to interact with the blockchain
+    }
+  });
   // Function to handle wallet connection
   const handleConnectWallet = async () => {
     try {
@@ -89,6 +144,23 @@ const Topbar = ({
     }
   };
 
+  const dispatch = useDispatch<AppDispatch>();
+  const address = useSelector(selectWalletAddress);
+  const status = useSelector(selectWalletStatus);
+
+  const handleGetWalletAddress = () => {
+    console.log('Connected address:', address);
+
+    setWalletAddress(address);
+    dispatch(getWalletAddress());
+
+  };
+
+  const handleUpdateWalletAddress = (newAddress: string) => {
+    dispatch(updateWalletAddress(newAddress));
+  };
+
+
   return (
     <Box
       display={'flex'}
@@ -100,20 +172,26 @@ const Topbar = ({
         display={'flex'}
         component="a"
         href="/"
-        title="theFront"
+        title="built on Ethereum"
         width={{ xs: 100, md: 120 }}
       >
         <Box
           component={'img'}
           src={
             mode === 'light' && !colorInvert
-              ? 'https://assets.maccarianagency.com/the-front/logos/logo.svg'
-              : 'https://assets.maccarianagency.com/the-front/logos/logo-negative.svg'
+              ? 'Ethereum.png'
+              : 'Ethereum.png'
           }
           height={1}
           width={1}
         />
       </Box>
+      <Typography sx={{ color: 'blue' }} >
+        Built on Ethereum
+      </Typography>
+      <Typography sx={{ color: 'blue' }} >
+        ETHBerlin04
+      </Typography>
       <Box sx={{ display: { xs: 'none', md: 'flex', fontSize: '50px' } }} alignItems={'center'} >
         <Box>
           <NavItem
@@ -126,52 +204,12 @@ const Topbar = ({
           />
         </Box>
         <Box marginLeft={4}>
-          <NavItem
-            title={'Portfolios'}
-            id={'news-pages'}
-            redirect={'/portfolios'}
-            colorInvert={colorInvert}
-          />
-        </Box>
-        <Box marginLeft={4}>
-          <NavItem
-            title={'Cryptos'}
-            id={'meetups-pages'}
-            redirect={'/cryptos'}
-            colorInvert={colorInvert}
-          />
-        </Box>
-        <Box marginLeft={4}>
-          <NavItem
-            title={'NFTs'}
-            id={'contact-pages'}
-            redirect={'/nfts'}
-            colorInvert={colorInvert}
-          />
-        </Box>
-        <Box marginLeft={4}>
-          <NavItem
-            title={'Tokens'}
-            id={'support-pages'}
-            redirect={'/support'}
-            colorInvert={colorInvert}
-          />
-        </Box>
-        <Box marginLeft={4}>
-          <NavItem
-            title={' Contact Us'}
-            id={'album-pages'}
-            redirect={'/album'}
-            colorInvert={colorInvert}
-          />
-        </Box>
-        <Box marginLeft={4}>
           <Button
             variant="contained"
             color="primary"
             component="a"
             target="blank"
-            onClick={handleConnectWallet}
+            onClick={handleGetWalletAddress}
             size="large"
           >
             {walletAddress ? `Wallet Connected: ${walletAddress}` : 'Connect Wallet'}
