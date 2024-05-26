@@ -75,7 +75,7 @@ const Footer = (): JSX.Element => {
           </Box>
           <Box display="flex" flexWrap={'wrap'} alignItems={'center'}>
           {/* <Form onSubmit={formik.handleSubmit}> */}
-          <Grid item xs={12}>
+          <Grid item xs={20}>
           <Typography variant={'subtitle2'} sx={{ marginBottom: 2 }}>
               Check if the wallet is qualified:
             </Typography>
@@ -103,7 +103,7 @@ const Footer = (): JSX.Element => {
           </Box>
         </Box>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={50}>
         <Typography
           align={'center'}
           variant={'subtitle2'}

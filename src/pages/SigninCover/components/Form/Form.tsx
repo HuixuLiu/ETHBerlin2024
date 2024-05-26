@@ -15,9 +15,12 @@ import {NotificationType} from '../../../../enum/notifcation-type-enum';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import  EthereumService  from '../../../../services/ethereum';
 import ContractService from 'services/contract-service';
+import ZKProofService from '../../../../services/zkproof';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWalletAddress, selectWalletStatus, getWalletAddress } from 'redux/slices/address';
 import { AppDispatch } from 'redux/store';
+import { ec as EC } from 'elliptic';
+import { is } from 'immer/dist/internal';
 
 const validationSchema = yup.object({
   username: yup
@@ -73,18 +76,27 @@ const Form = (): JSX.Element => {
     try {
       handleGetWalletAddress();
       //Should to ZK Proof here
-      const zkproof = await EthereumService.uploadData(address, values.publicKey, values.signature, age, isDoctor, isDriver);
+      
 
-      if(zkproof){
+// console.log(`Proof valid for message ${message1}:`, isValid1);
+      const message1 = age;
+      const { secret: secret1, publicKey: publicKey1} = ZKProofService.generateKeys(age.toString());
+      const G = new EC('secp256k1');
+      const { R: R1, s: s1 } = ZKProofService.createProof(G, secret1);
+      const isValid1 = ZKProofService.verifyProof(G, publicKey1, R1, s1);
+      //const zkproof = await EthereumService.uploadData(address, values.publicKey, values.signature, age, isDoctor, isDriver);
+
+      if(isValid1){
         NotificationService('Congrats! Upload Successfully', NotificationType.SUCCESS, 'ZK Proved Valid!');
-
+        console.log(`Proof valid for message ${message1}:`, isValid1);
+     
         const contract = await ContractService.initializeEthers();
         const response = await ContractService.addAddress(contract.contract, address);
         if (!response) {
           NotificationService('Failed to add address to valid list', NotificationType.DANGER, 'The address is not valid');
         } else {
           navigate('/home', 
-            {state:{zkproof : zkproof, age: age, isDoctor: isDoctor, isDriver: isDriver, address: address}}
+            {state:{zkproof : isValid1, age: age, isDoctor: isDoctor, isDriver: isDriver, address: address}}
           );
           NotificationService('We labeled your address!', NotificationType.SUCCESS, 'You can now check your proof');
         }

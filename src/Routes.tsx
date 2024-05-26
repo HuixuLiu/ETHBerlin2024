@@ -13,15 +13,8 @@ import AuthGuard from './components/guards/AuthGuard';
 import SignIn from './pages/SigninCover';
 
 // Contact Page
-const TermsPage = async(() => import('./pages/CompanyTerms'));
-
-const ContactPage = async(() => import('./pages/Contacts'));
 const HomePage = async(() => import('./pages/Home'));
 const PortfolioPage = async(() => import('./pages/Portfolio'));
-const CryptoPage = async(() => import('./pages/Cryptos'));
-//const MeetupPage = async(() => import('./pages/Elearning'));
-// const SupportPage = async(() => import('./pages/HelpCenter'));
-const NFTPage = async(() => import('./pages/Album'));
 
 const Routes = [
   // {
@@ -53,42 +46,6 @@ const Routes = [
         element: <HomePage/>,
       },
     ]
-  },
-  {
-    path: 'terms',
-    element: <TermsPage/>,
-  },
-  {
-    path: 'portfolios',
-    // element: <DashboardLayout/>,
-    children: [
-      {
-        path: '',
-        element: <PortfolioPage/>,
-      },
-    ],
-  },
-  {
-    path: 'cryptos',
-    element: <CryptoPage/>
-  },
-  {
-    path: 'contacts',
-    element: <ContactPage/>,
-  },
-  {
-    path: 'support',
-    element: <PortfolioPage/>,
-  },
-  {
-    path: 'nfts',
-    element: <NFTPage/>,
-    // children: [
-    //   {
-    //     path: '',
-    //     element: <AlbumPage/>,
-    //   },
-    // ],
   },
   {
     path: '*',
