@@ -116,7 +116,7 @@ const rows = [
 
 // Arbitrum One
 async function getProvider() {
-  const contractAddress = '0xff1a0f4744e8582DF1aE09D5611b887B6a12925C';
+  const contractAddress = '0x178a9995af257C3566A541eCCFd9085093E46A19';
   const provider = ethers.getDefaultProvider('https://arb1.arbitrum.io/rpc');
   const contract = new ethers.Contract(contractAddress, PythAbi, provider);
   
